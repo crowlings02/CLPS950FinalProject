@@ -4,10 +4,10 @@ Screen('Preferences', 'SkipSyncTests', 1); %forgo syncTests
 
 %% Start Game
 
-% open a display window               
+ % open a display window               
 screens=Screen('Screens');
 screenNumber=max(screens);
-[window, wRect]=Screen('OpenWindow',screenNumber,0,[0,0,600,400],32,2);
+[window, wRect]=Screen('OpenWindow',screenNumber,0,[0,0,600,500],32,2);
 Screen(window,'BlendFunction',GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 [xc,yc] = RectCenter(wRect);%center of screen location in pixels
 
@@ -16,16 +16,24 @@ white = WhiteIndex(screenNumber); % define white color
 Screen('TextSize', window, 20); % set text font size
 
 % Check for key press
-KbStrokeWait;
+ListenChar(2);	%block keyboard output to Command window
+     % pause does not work but this seems to
+     keywait = 33;      %start in some neutral state
+     while (keywait ==33) 
+         keywait = GetChar;
+         if  isnan(keywait), keywait = 33;end
+     end
+ListenChar(1);
+
+%KbStrokeWait;
 
 % start screen text
-Screen(window,'TextSize',20); % set font size
+Screen(window,'TextSize',25); % set font size
 Screen ('FillRect',window,uint8(white)); % make entire screen white
-Screen('DrawText', window, 'MINESWEEPER', xc/2, yc/2, black);
-Screen('DrawText', window, 'Press any key to start', xc/2, yc/2 + 50, black);
-Screen('Flip', window); 
+DrawFormattedText(window, 'MINESWEEPER', 'center', yc - 30, black);
+DrawFormattedText(window, 'Press any key to start', 'center', yc + 30, black);
+Screen('Flip', window);  
 
-% Check for key press
 KbStrokeWait;
 
 % Display instructions page
@@ -67,8 +75,10 @@ Screen('DrawText', window, 'game screen', xc/2, yc/2, black);
 % Screen('FillRect', window, rectColor, centeredRect);
 
 GenerateVisualGrid();             
+
 % Flip to the screen. 
 Screen('Flip', window);
+
 
 %wait for a keyboard button press to terminate.
 KbStrokeWait;

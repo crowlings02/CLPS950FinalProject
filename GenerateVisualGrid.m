@@ -1,17 +1,33 @@
-x = 0;
-y = 0;
+%initialize size of the grid
+numRows = 16;
+numCols = 24;
 
-for row = 1:4
-    for sqr = 1:6
-        Screen('FillRect', window,[0,0,0],[x,y,x+100,y+100]);
-        x = x + 100;
-        y = y + 100;
-    %     if x >= 600
-    %         
-    %     end
-    end 
-%     y = y + 100;
+stateGrid = zeros(numRows, numCols);
+
+for r=1:numRows
+    for c=1:numCols
+        left = (c - 1) * 25;
+        top = (r - 1) * 25 + 100;
+        
+        squareColor = [160, 160, 160];
+
+        if stateGrid(r, c) ~= 0
+            squareColor = [110, 110, 110];
+        end
+
+        rect = [left + 1, top + 1, left + 24, top + 24];
+        
+        Screen('FillRect', window, squareColor, rect);
+    end
 end
+
+Screen('FillRect', window, [80, 80, 80], [0, 0, 600, 500]);
+
+Screen(window,'TextSize',25);
+DrawFormattedText(window, 'MINESWEEPER', 'center', 30, black);
+
+
+
 
 % Screen(‘FillRect’, windowPtr [,color] [,rect] )
 % 

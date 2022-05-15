@@ -1,5 +1,5 @@
 
-function[adjacentGrid, stateGrid,numCleared] = FillBlanks(rowClick, colClick, adjacentGrid, stateGrid, numRows, numCols, numCleared)
+function[adjacentBombGrid, stateGrid,numCleared] = FillBlanks(row, col, adjacentBombGrid, stateGrid, numRows, numCols, numCleared)
     % for each square, loop through adjacent squares
     for ra=max(row - 1, 1):min(row + 1, numRows)
         for ca=max(col - 1, 1):min(col + 1, numCols)
@@ -11,8 +11,8 @@ function[adjacentGrid, stateGrid,numCleared] = FillBlanks(rowClick, colClick, ad
     
                 % if it is blank, recursively call function on that blank's
                 % neighbors
-                if adjacentGrid(ra, ca) == 0
-                    [adjacentGrid, stateGrid, numCleared] = FillEmptySquares(ra, ca, adjacentGrid, stateGrid, numRows, numCols, numCleared);
+                if adjacentBombGrid(ra, ca) == 0
+                    [adjacentBombGrid, stateGrid, numCleared] = FillEmptySquares(ra, ca, adjacentBombGrid, stateGrid, numRows, numCols, numCleared);
                 end
             end
         end

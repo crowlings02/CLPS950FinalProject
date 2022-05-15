@@ -1,5 +1,6 @@
 
 
+function [totalToClear,stateGrid] = GenerateVisualGrid()
 %initialize size of the grid
 numRows = 16;
 numCols = 24;
@@ -39,3 +40,4 @@ Screen('FillRect', window, [255, 0, 0], [500, 30, 570, 70]);
 Screen(window,'TextSize',25);
 DrawFormattedText(window, 'Quit', 511, 58, black);
 
+end

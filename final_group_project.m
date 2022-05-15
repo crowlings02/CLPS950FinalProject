@@ -53,15 +53,17 @@ Screen('DrawText', window, 'game screen', xc/2, yc/2, black);
   
 
 
-GenerateBombs();
-GetAdjacentBombs();
+[numCleared, totalToClear,exploded, bombGrid] = GenerateBombs();
+[adjacentGrid] = GetAdjacentBombs();
+
 
 % Flip to the screen. 
 Screen('Flip', window);
 
 % constanlty check frames
 while 1
-    GenerateVisualGrid(); 
+    [totalToClear,stateGrid] = GenerateVisualGrid(); 
+    [exploded, bombGrid, stateGrid, adjacentGrid, numCleared] = checkClicks();
 
     %draw bombs
     if stateGrid(r, c) == -1
@@ -77,6 +79,8 @@ while 1
         end
     end
 
+    % figure out when to fill in blanks???
+    %[adjacentGrid, stateGrid,numCleared] = FillBlanks();
     Screen('Flip', window);
 
     %check for game end

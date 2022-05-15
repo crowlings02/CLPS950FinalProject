@@ -1,3 +1,5 @@
+
+function [adjacentGrid] = GetAdjacentBombs()
 % stores # of adjacent bombs for every square
 adjacentGrid = zeros(numRows, numCols);
 

@@ -52,36 +52,44 @@ Screen ('FillRect',window,uint8(white)); % make entire screen white
 Screen('DrawText', window, 'game screen', xc/2, yc/2, black);
   
 
-% % Get the centre coordinate of the window in pixels
-% % For help see: help RectCenter
-% [xCenter, yCenter] = RectCenter(wRect);
-% % Make a base Rect of 200 by 200 pixels. This is the rect which defines the
-% % size of our square in pixels. Rects are rectangles, so the
-% % sides do not have to be the same length. The coordinates define the top
-% % left and bottom right coordinates of our rect [top-left-x top-left-y
-% % bottom-right-x bottom-right-y]. The easiest thing to do is set the first
-% % two coordinates to 0, then the last two numbers define the length of the
-% % rect in X and Y. The next line of code then centers the rect on a
-% % particular location of the screen.
-% baseRect = [0 0 200 200];
-% 
-% % Center the rectangle on the centre of the screen using fractional pixel
-% % values.
-% centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
-% rectColor = [1 0 0];
-% 
-% % Draw the square to the screen. For information on the command used in
-% % this line see Screen FillRect?
-% Screen('FillRect', window, rectColor, centeredRect);
 
-GenerateVisualGrid();             
+GenerateBombs();
+GetAdjacentBombs();
 
 % Flip to the screen. 
 Screen('Flip', window);
 
+% constanlty check frames
+while 1
+    GenerateVisualGrid(); 
 
-%wait for a keyboard button press to terminate.
-KbStrokeWait;
+    %draw bombs
+    if stateGrid(r, c) == -1
+        Screen('FillOval', window, [0, 0, 0], [left + 5, top + 5, left + 20, top + 20]);
+    end
+
+    % show number of adjacent bombs if clicked
+    if stateGrid(r, c) == 1
+        % show number of bombs adjacent to clicked square
+        if adjacentGrid(r, c) > 0
+            Screen(window,'TextSize',18);
+            DrawFormattedText(window, num2str(adjacentGrid(r, c)), left + 7, top + 18, black);
+        end
+    end
+
+    Screen('Flip', window);
+
+    %check for game end
+    if exploded
+        Screen(window,'TextSize',20); % set font size
+        Screen ('FillRect',window,uint8(white)); % make entire screen white
+        Screen('DrawText', window, 'game over', xc/2, yc/2, black);
+  
+        %wait for a keyboard button press to terminate.
+        KbStrokeWait;
+    end
+
+end
 
 % Clear the screen. 
 sca;

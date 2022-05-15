@@ -63,7 +63,6 @@ Screen('Flip', window);
 % constanlty check frames
 while 1
     [totalToClear,stateGrid] = GenerateVisualGrid(); 
-    [exploded, bombGrid, stateGrid, adjacentGrid, numCleared] = checkClicks();
 
     %draw bombs
     if stateGrid(r, c) == -1
@@ -79,6 +78,11 @@ while 1
         end
     end
 
+     [exploded, bombGrid, stateGrid, adjacentGrid, numCleared] = checkClicks();
+    if adjacentGrid(rowClick, colClick) == 0
+                [adjacentGrid, stateGrid, numCleared] = FillEmptySquares(rowClick, colClick, adjacentGrid, stateGrid, numRows, numCols, numCleared);
+    end
+    
     % figure out when to fill in blanks???
     %[adjacentGrid, stateGrid,numCleared] = FillBlanks();
     Screen('Flip', window);

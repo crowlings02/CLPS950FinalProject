@@ -1,15 +1,7 @@
 
 
 function [totalToClear,stateGrid] = GenerateVisualGrid()
-%initialize size of the grid
-numRows = 16;
-numCols = 24;
-numCleared = 0;
 
-% Squares without bombs
-totalToClear = numRows * numCols - numBombs;
-
-stateGrid = zeros(numRows, numCols);
 
 for r=1:numRows
     for c=1:numCols

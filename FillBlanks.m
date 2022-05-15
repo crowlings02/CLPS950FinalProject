@@ -1,15 +1,20 @@
 
 function[adjacentGrid, stateGrid,numCleared] = FillBlanks(rowClick, colClick, adjacentGrid, stateGrid, numRows, numCols, numCleared)
     % for each square, loop through adjacent squares
-        for ra=max(r - 1, 1):min(r + 1, numRows)
-            for ca=max(c - 1, 1):min(c + 1, numCols)
-                %make recursive
-                %if blank, then it 
-                if stateGrid(ra, ca) == 0
-                    stateGrid(ra, ca) = 1;
-                    numCleared = numCleared + 1;
+    for ra=max(row - 1, 1):min(row + 1, numRows)
+        for ca=max(col - 1, 1):min(col + 1, numCols)
+            % check adjacent square is not the square itself and hasn't been clicked
+            if ((row ~= ra) || (col ~= ca)) && (stateGrid(ra, ca) == 0)
+                % update square to being clicked and add it as cleared
+                stateGrid(ra, ca) = 1;
+                numCleared = numCleared + 1;
+    
+                % if it is blank, recursively call function on that blank's
+                % neighbors
+                if adjacentGrid(ra, ca) == 0
                     [adjacentGrid, stateGrid, numCleared] = FillEmptySquares(ra, ca, adjacentGrid, stateGrid, numRows, numCols, numCleared);
                 end
             end
         end
+    end
 end

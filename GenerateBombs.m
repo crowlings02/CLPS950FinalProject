@@ -1,8 +1,5 @@
 
-function[numCleared, totalToClear,exploded, bombGrid] = GenerateBombs()
-numBombs = 40;
-numCleared = 0;
-totalToClear = numRows * numCols - numBombs;
+function[numCleared, totalToClear,exploded, numBombs, bombGrid] = GenerateBombs(numCleared, totalToClear, numBombs)
 
 bombGrid = zeros(numRows, numCols);
 randSample = randperm(numRows * numCols, numBombs);

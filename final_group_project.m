@@ -52,9 +52,21 @@ Screen ('FillRect',window,uint8(white)); % make entire screen white
 Screen('DrawText', window, 'game screen', xc/2, yc/2, black);
   
 
+%initialize size of the grid
+numRows = 16;
+numCols = 24;
 
-[numCleared, totalToClear,exploded, bombGrid] = GenerateBombs();
+% Squares without bombs
+numCleared = 0;
+numBombs = 40;
+totalToClear = numRows * numCols - numBombs;
+
+stateGrid = zeros(numRows, numCols);
+[numCleared, totalToClear,exploded, bombGrid] = GenerateBombs(numCleared, totalToClear, numBombs);
 [adjacentGrid] = GetAdjacentBombs();
+
+
+
 
 
 % Flip to the screen. 
@@ -62,41 +74,70 @@ Screen('Flip', window);
 
 % constanlty check frames
 while 1
-    [totalToClear,stateGrid] = GenerateVisualGrid(); 
+    % background of game screen
+    Screen('FillRect', window, [80, 80, 80], [0, 0, 600, 500]);
+    Screen(window,'TextSize',25);
+    DrawFormattedText(window, 'MINESWEEPER', 'center', 30, black);
 
-    %draw bombs
-    if stateGrid(r, c) == -1
-        Screen('FillOval', window, [0, 0, 0], [left + 5, top + 5, left + 20, top + 20]);
-    end
+    Screen(window,'TextSize',18);
+    DrawFormattedText(window, strcat('Cleared:', num2str(numCleared), '/', num2str(totalToClear)), 20, 70, black);
 
-    % show number of adjacent bombs if clicked
-    if stateGrid(r, c) == 1
-        % show number of bombs adjacent to clicked square
-        if adjacentGrid(r, c) > 0
-            Screen(window,'TextSize',18);
-            DrawFormattedText(window, num2str(adjacentGrid(r, c)), left + 7, top + 18, black);
+    Screen('FillRect', window, [255, 0, 0], [500, 30, 570, 70]);
+    Screen(window,'TextSize',25);
+    DrawFormattedText(window, 'Quit', 511, 58, black);
+
+    % generate the visual grid
+    for r=1:numRows
+        for c=1:numCols
+            % calculate x and y of each square
+            left = (c - 1) * 25;
+            top = (r - 1) * 25 + 100;
+            
+            squareColor = [160, 160, 160];
+
+            % clicked square
+            if stateGrid(r, c) ~= 0
+                squareColor = [110, 110, 110];
+            end
+
+            % create rectangle of square in grid
+            rect = [left + 1, top + 1, left + 24, top + 24];
+            
+            Screen('FillRect', window, squareColor, rect);
+
+            % bomb and clicked
+            if stateGrid(r, c) == -1
+                Screen('FillOval', window, [0, 0, 0], [left + 5, top + 5, left + 20, top + 20]);
+            end
+
+            % clicked square
+            if stateGrid(r, c) == 1
+                % show number of bombs adjacent to clicked square
+                if adjacentGrid(r, c) > 0
+                    Screen(window,'TextSize',18);
+                    DrawFormattedText(window, num2str(adjacentGrid(r, c)), left + 7, top + 18, black);
+                end
+            end
         end
     end
 
-     [exploded, bombGrid, stateGrid, adjacentGrid, numCleared] = checkClicks();
-    if adjacentGrid(rowClick, colClick) == 0
-                [adjacentGrid, stateGrid, numCleared] = FillEmptySquares(rowClick, colClick, adjacentGrid, stateGrid, numRows, numCols, numCleared);
-    end
-    
-    % figure out when to fill in blanks???
-    %[adjacentGrid, stateGrid,numCleared] = FillBlanks();
     Screen('Flip', window);
-
+    [exploded, bombGrid, stateGrid, adjacentGrid, numCleared] = checkClicks();
+    
     %check for game end
     if exploded
-        Screen(window,'TextSize',20); % set font size
-        Screen ('FillRect',window,uint8(white)); % make entire screen white
-        Screen('DrawText', window, 'game over', xc/2, yc/2, black);
-  
-        %wait for a keyboard button press to terminate.
-        KbStrokeWait;
+        break;
     end
 
+end
+
+if exploded
+    Screen(window,'TextSize',20); % set font size
+    Screen ('FillRect',window,uint8(white)); % make entire screen white
+    Screen('DrawText', window, 'game over', xc/2, yc/2, black);
+    
+    %wait for a keyboard button press to terminate.
+    KbStrokeWait;
 end
 
 % Clear the screen. 

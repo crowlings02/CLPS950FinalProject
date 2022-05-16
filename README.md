@@ -1,4 +1,4 @@
-# CLPS950FinalProject
+# CLPS950FinalProject - Alexis & Caitlin
 
 Product: 
 We recreated the minesweeper game in Matlab. 

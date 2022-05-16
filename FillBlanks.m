@@ -1,5 +1,11 @@
-
+%% Coded and debugged by Alexis & Caitlin
 function[adjacentBombGrid, stateGrid,numCleared] = FillBlanks(row, col, adjacentBombGrid, stateGrid, numRows, numCols, numCleared)
+% This function recursively fills in all blanks and their adjacent squares.
+% It takes in a square's row, column, as well as the adjacentGrid,
+% stateGrid, and number of rows, columns and number of cleared squares. It
+% outputs the updated adjacent grid, state grid, and number of cleared
+% squares.
+
     % for each square, loop through adjacent squares
     for ra=max(row - 1, 1):min(row + 1, numRows)
         for ca=max(col - 1, 1):min(col + 1, numCols)
@@ -12,7 +18,7 @@ function[adjacentBombGrid, stateGrid,numCleared] = FillBlanks(row, col, adjacent
                 % if it is blank, recursively call function on that blank's
                 % neighbors
                 if adjacentBombGrid(ra, ca) == 0
-                    [adjacentBombGrid, stateGrid, numCleared] = FillEmptySquares(ra, ca, adjacentBombGrid, stateGrid, numRows, numCols, numCleared);
+                    [adjacentBombGrid, stateGrid, numCleared] = FillBlanks(ra, ca, adjacentBombGrid, stateGrid, numRows, numCols, numCleared);
                 end
             end
         end
